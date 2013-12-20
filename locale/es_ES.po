@@ -1,0 +1,7 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:sale.sale,shipment_out_returns:"
+msgid "Shipment Returns from Shipment Out"
+msgstr "Albaranes de devolución desde albaranes"
