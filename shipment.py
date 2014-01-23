@@ -45,24 +45,23 @@ class CreateSaleReturn(Wizard):
                 (shipment_out_return.code),raise_exception=False)
 
             # create sale
-            sale_vals = Sale.get_sale_data(party, description)
-            sale = Sale(**sale_vals)
+            sale = Sale.get_sale_data(party, description)
             sale.shipment_address = shipment_out_return.delivery_address
             sale.save()
             sales.append(sale)
 
             # create sale lines from moves
-            lines_to_create = []
+            lines = []
             for move in shipment_out_return.incoming_moves:
                 product = move.product
                 quantity = -move.quantity
                 uom = move.uom.symbol
-                vals = SaleLine.get_sale_line_data(
+                line = SaleLine.get_sale_line_data(
                     sale, product, quantity, uom)
-                vals['unit_price'] = move.unit_price or vals.get('unit_price')
-                lines_to_create.append(vals)
-
-            lines = SaleLine.create(lines_to_create)
+                if move.unit_price:
+                    line.unit_price = move.unit_price
+                line.save()
+                lines.append(line)
 
             # write stock move origin
             lines_to_move = []
