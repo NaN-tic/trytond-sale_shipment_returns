@@ -4,6 +4,7 @@
 from trytond.pool import Pool, PoolMeta
 from trytond.wizard import Wizard, StateAction
 from trytond.transaction import Transaction
+from decimal import Decimal
 
 __all__ = ['CreateSaleReturn']
 __metaclass__ = PoolMeta
@@ -58,8 +59,13 @@ class CreateSaleReturn(Wizard):
                 uom = move.uom.symbol
                 line = SaleLine.get_sale_line_data(
                     sale, product, quantity, uom)
-                if move.unit_price:
-                    line.unit_price = move.unit_price
+
+                unit_price = None
+                if move.origin:
+                    if hasattr(move.origin, 'unit_price'):
+                        unit_price = move.origin.unit_price
+                line.unit_price = unit_price or move.unit_price or Decimal('0.0')
+
                 line.save()
                 lines.append(line)
 
