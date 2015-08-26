@@ -30,6 +30,7 @@ class CreateSaleReturn(Wizard):
         ShipmentOutReturn = pool.get('stock.shipment.out.return')
         Sale = pool.get('sale.sale')
         SaleLine = pool.get('sale.line')
+        Move = pool.get('stock.move')
 
         shipment_ids = Transaction().context['active_ids']
         shipment_out_returns = ShipmentOutReturn.browse(shipment_ids)
@@ -45,14 +46,12 @@ class CreateSaleReturn(Wizard):
             description = self.raise_user_error('shipment_description',
                 (shipment_out_return.code),raise_exception=False)
 
-            # create sale
+            # create sale and lines from moves, and new origin move
             sale = Sale.get_sale_data(party, description)
             sale.shipment_address = shipment_out_return.delivery_address
-            sale.save()
-            sales.append(sale)
 
-            # create sale lines from moves
             lines = []
+            moves_to_save = []
             for move in shipment_out_return.incoming_moves:
                 product = move.product
                 quantity = -move.quantity
@@ -65,26 +64,17 @@ class CreateSaleReturn(Wizard):
                     if hasattr(move.origin, 'unit_price'):
                         unit_price = move.origin.unit_price
                 line.unit_price = unit_price or move.unit_price or Decimal('0.0')
-
-                line.save()
+                line.save() # save line to add new origin to move
                 lines.append(line)
+                move.origin = 'sale.line,%s' % line.id # new origin
+                moves_to_save.append(move)
+            sale.lines = lines
+            sales.append(sale)
 
-            # write stock move origin
-            lines_to_move = []
-            if lines:
-                for line in lines:
-                    lines_to_move.append({
-                        'product': line.product,
-                        'quantity': abs(line.quantity),
-                        'id': line.id,
-                        })
-            if lines_to_move:
-                for move in shipment_out_return.incoming_moves:
-                    for l2m in lines_to_move:
-                        if l2m['product'] == move.product and \
-                                l2m['quantity'] == move.quantity:
-                            move.origin = 'sale.line,%s' % l2m['id']
-                            move.save()
+        if sales:
+            Sale.save(sales)
+        if moves_to_save:
+            Move.save(moves_to_save)
 
         data = {'res_id': [x.id for x in sales]}
         if len(sales) == 1:
