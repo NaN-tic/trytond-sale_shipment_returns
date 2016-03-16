@@ -52,22 +52,17 @@ class CreateSaleReturn(Wizard):
 
             lines = []
             moves_to_save = []
+            outgoing_move_products = {m.product: m.origin
+                for m in shipment_out_return.origin.outgoing_moves
+                if hasattr(m, 'origin') and isinstance(m.origin, SaleLine)}
             for move in shipment_out_return.incoming_moves:
-                product = move.product
-                quantity = -move.quantity
-                uom = move.uom.symbol
-                line = SaleLine.get_sale_line_data(
-                    sale, product, quantity, uom)
-
-                unit_price = None
-                if move.origin:
-                    if hasattr(move.origin, 'unit_price'):
-                        unit_price = move.origin.unit_price
-                line.unit_price = unit_price or move.unit_price or Decimal('0.0')
-                line.save() # save line to add new origin to move
-                lines.append(line)
-                move.origin = 'sale.line,%s' % line.id # new origin
-                moves_to_save.append(move)
+                if move.product in outgoing_move_products:
+                    line, = SaleLine.copy(
+                        [outgoing_move_products[move.product]],
+                        {'quantity': -move.quantity})
+                    lines.append(line)
+                    move.origin = 'sale.line,%s' % line.id
+                    moves_to_save.append(move)
             sale.lines = lines
             sales.append(sale)
 
