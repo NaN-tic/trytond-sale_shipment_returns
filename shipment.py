@@ -4,7 +4,6 @@
 from trytond.pool import Pool, PoolMeta
 from trytond.wizard import Wizard, StateAction
 from trytond.transaction import Transaction
-from decimal import Decimal
 
 __all__ = ['CreateSaleReturn']
 __metaclass__ = PoolMeta
@@ -20,8 +19,8 @@ class CreateSaleReturn(Wizard):
         super(CreateSaleReturn, cls).__setup__()
         cls._error_messages.update({
                 'shipment_done_title': 'You can not create return sale',
-                'shipment_done_msg': ('The return shipment with code "%s" is not yet '
-                    'sent.'),
+                'shipment_done_msg': ('The return shipment with code "%s" is '
+                    'not yet sent.'),
                 'shipment_description': ('Shipment Out Return "%s"'),
                 })
 
@@ -44,7 +43,7 @@ class CreateSaleReturn(Wizard):
 
             party = shipment_out_return.customer
             description = self.raise_user_error('shipment_description',
-                (shipment_out_return.code),raise_exception=False)
+                (shipment_out_return.code), raise_exception=False)
 
             # create sale and lines from moves, and new origin move
             sale = Sale.get_sale_data(party, description)
