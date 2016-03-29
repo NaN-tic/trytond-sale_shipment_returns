@@ -1,12 +1,11 @@
 # This file is part sale_shipment_returns module for Tryton.
 # The COPYRIGHT file at the top level of this repository contains
 # the full copyright notices and license terms.
-from trytond.pool import Pool, PoolMeta
+from trytond.pool import Pool
 from trytond.wizard import Wizard, StateAction
 from trytond.transaction import Transaction
 
 __all__ = ['CreateSaleReturn']
-__metaclass__ = PoolMeta
 
 
 class CreateSaleReturn(Wizard):
