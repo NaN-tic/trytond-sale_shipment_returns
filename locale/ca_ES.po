@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -13,10 +13,6 @@ msgstr "L'albarà de devolució amb codi \"%s\" no s'ha enviat encara."
 msgctxt "error:stock.sale.return.create:"
 msgid "You can not create return sale"
 msgstr "No pot crear una venda de devolució"
-
-msgctxt "field:sale.sale,shipment_out_returns:"
-msgid "Shipment Returns from Shipment Out"
-msgstr "Albarans de devolució des de albarans"
 
 msgctxt "model:ir.action,name:create_sale_return"
 msgid "Create Return Sale"
