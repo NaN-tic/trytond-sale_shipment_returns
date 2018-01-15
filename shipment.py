@@ -21,10 +21,13 @@ class CreateSaleReturn(Wizard):
                 'shipment_done_msg': ('The return shipment with code "%s" is '
                     'not yet sent.'),
                 'shipment_description': ('Shipment Out Return "%s"'),
+                'shipment_out_origin': ('Shipment Out Return "%s" origin does '
+                    'not come from a Shipment Out'),
                 })
 
     def do_start(self, action):
         pool = Pool()
+        ShipmentOut = pool.get('stock.shipment.out')
         ShipmentOutReturn = pool.get('stock.shipment.out.return')
         Sale = pool.get('sale.sale')
         SaleLine = pool.get('sale.line')
@@ -50,17 +53,21 @@ class CreateSaleReturn(Wizard):
 
             lines = []
             moves_to_save = []
-            outgoing_move_products = {m.product: m.origin
-                for m in shipment_out_return.origin.outgoing_moves
-                if hasattr(m, 'origin') and isinstance(m.origin, SaleLine)}
-            for move in shipment_out_return.incoming_moves:
-                if move.product in outgoing_move_products:
-                    line, = SaleLine.copy(
-                        [outgoing_move_products[move.product]],
-                        {'quantity': -move.quantity})
-                    lines.append(line)
-                    move.origin = 'sale.line,%s' % line.id
-                    moves_to_save.append(move)
+            if isinstance(shipment_out_return.origin, ShipmentOut):
+                outgoing_move_products = {m.product: m.origin
+                    for m in shipment_out_return.origin.outgoing_moves
+                    if hasattr(m, 'origin') and isinstance(m.origin, SaleLine)}
+                for move in shipment_out_return.incoming_moves:
+                    if move.product in outgoing_move_products:
+                        line, = SaleLine.copy(
+                            [outgoing_move_products[move.product]],
+                            {'quantity': -move.quantity})
+                        lines.append(line)
+                        move.origin = 'sale.line,%s' % line.id
+                        moves_to_save.append(move)
+            if not lines:
+                self.raise_user_error('shipment_out_origin', (
+                    shipment_out_return.rec_name,))
             sale.lines = lines
             sales.append(sale)
 

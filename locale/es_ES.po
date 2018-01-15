@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -13,10 +13,6 @@ msgstr "El albarán de devolución con código \"%s\" no se ha enviado todavía.
 msgctxt "error:stock.sale.return.create:"
 msgid "You can not create return sale"
 msgstr "No puede crear una venta a partir de una devolución"
-
-msgctxt "field:sale.sale,shipment_out_returns:"
-msgid "Shipment Returns from Shipment Out"
-msgstr "Albaranes de devolución desde albaranes"
 
 msgctxt "model:ir.action,name:create_sale_return"
 msgid "Create Return Sale"
