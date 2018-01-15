@@ -7,6 +7,10 @@ msgid "Shipment Out Return \"%s\""
 msgstr "Albarà de devolució \"%s\""
 
 msgctxt "error:stock.sale.return.create:"
+msgid "Shipment Out Return \"%s\" origin does not come from a Shipment Out"
+msgstr "L'origen de l'albarà devolució \"%s\" no prové d'un albarà de client."
+
+msgctxt "error:stock.sale.return.create:"
 msgid "The return shipment with code \"%s\" is not yet sent."
 msgstr "L'albarà de devolució amb codi \"%s\" no s'ha enviat encara."
 
