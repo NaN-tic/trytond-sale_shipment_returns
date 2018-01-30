@@ -49,7 +49,13 @@ class CreateSaleReturn(Wizard):
 
             # create sale and lines from moves, and new origin move
             sale = Sale.get_sale_data(party, description)
-            sale.shipment_address = shipment_out_return.delivery_address
+
+            # add shipment_party when delivery address party
+            # is not the same as the customer
+            delivery_address = shipment_out_return.delivery_address
+            if delivery_address.party and (delivery_address.party != party):
+                sale.shipment_party = delivery_address.party
+            sale.shipment_address = delivery_address
 
             lines = []
             moves_to_save = []
