@@ -44,7 +44,16 @@ class CreateSaleReturn(Wizard):
                         error_description='shipment_done_msg',
                         error_description_args=shipment_out_return.code)
 
-            party = shipment_out_return.customer
+            sale_origin = None
+            if isinstance(shipment_out_return.origin, ShipmentOut):
+                shipment_out = shipment_out_return.origin
+                if isinstance(shipment_out.origin, Sale):
+                    sale_origin = shipment_out.origin
+
+            if sale_origin:
+                party = sale_origin.party
+            else:
+                party = shipment_out_return.customer
             description = self.raise_user_error('shipment_description',
                 (shipment_out_return.code), raise_exception=False)
 
