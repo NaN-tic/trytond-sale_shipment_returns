@@ -30,9 +30,8 @@ class CreateSaleReturn(Wizard):
         for shipment_out_return in shipment_out_returns:
             if shipment_out_return.state != 'done':
                 raise UserError(gettext(
-                    'sale_shipment_returns.hipment_done_title',
-                        error_description='shipment_done_msg',
-                        error_description_args=shipment_out_return.code))
+                    'sale_shipment_returns.msg_shipment_done_title',
+                        shipment=shipment_out_return.number))
 
             sale_origin = None
             if isinstance(shipment_out_return.origin, ShipmentOut):
@@ -44,8 +43,8 @@ class CreateSaleReturn(Wizard):
                 party = sale_origin.party
             else:
                 party = shipment_out_return.customer
-            description = gettext('sale_shipment_returns.hipment_description',
-                shipment=shipment_out_return.code)
+            description = gettext('sale_shipment_returns.msg_shipment_description',
+                shipment=shipment_out_return.number)
 
             # create sale and lines from moves, and new origin move
             sale = Sale.get_sale_data(party, description)
@@ -72,8 +71,8 @@ class CreateSaleReturn(Wizard):
                         move.origin = 'sale.line,%s' % line.id
                         moves_to_save.append(move)
             if not lines:
-                raise UserError(gettext(
-                    'sale_shipment_returns.shipment_out_origin',
+                raise UserError(
+                    gettext('sale_shipment_returns.msg_shipment_out_origin',
                     shipment=shipment_out_return.rec_name))
 
             sale.lines = lines
