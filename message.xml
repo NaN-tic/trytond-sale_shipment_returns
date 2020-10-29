@@ -3,16 +3,16 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data grouped="1">
-      <record model="ir.message" id="shipment_done_title">
-          <field name="text">You can not create return sale</field>
+      <record model="ir.message" id="msg_shipment_done_title">
+          <field name="text">You can not create return sale from "%(shipment)s"</field>
       </record>
-      <record model="ir.message" id="shipment_done_msg">
+      <record model="ir.message" id="msg_shipment_done_msg">
           <field name="text">The return shipment with code "%(shipment)s" is not yet sent.</field>
       </record>
-      <record model="ir.message" id="shipment_description">
+      <record model="ir.message" id="msg_shipment_description">
           <field name="text">Shipment Out Return "%(shipment)s"</field>
       </record>
-      <record model="ir.message" id="shipment_out_origin">
+      <record model="ir.message" id="msg_shipment_out_origin">
           <field name="text">Shipment Out Return "%(shipment)s" origin does not come from a Shipment Out</field>
       </record>
     </data>
