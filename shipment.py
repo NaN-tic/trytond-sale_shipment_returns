@@ -64,12 +64,18 @@ class CreateSaleReturn(Wizard):
                     if hasattr(m, 'origin') and isinstance(m.origin, SaleLine)}
                 for move in shipment_out_return.incoming_moves:
                     if move.product in outgoing_move_products:
-                        line, = SaleLine.copy(
-                            [outgoing_move_products[move.product]],
-                            {'quantity': -move.quantity})
-                        lines.append(line)
-                        move.origin = 'sale.line,%s' % line.id
+                        values = {'quantity': -move.quantity}
+                        if hasattr(SaleLine, 'kit_parent_line'):
+                            values['kit_parent_line'] = None
+                        with Transaction().set_context(check_kit_parent_line=False):
+                            sale_lines = SaleLine.copy(
+                                [outgoing_move_products[move.product]], values)
+                        if not sale_lines:
+                            continue
+                        lines += sale_lines
+                        move.origin = 'sale.line,%s' % sale_lines[0].id
                         moves_to_save.append(move)
+
             if not lines:
                 raise UserError(
                     gettext('sale_shipment_returns.msg_shipment_out_origin',
