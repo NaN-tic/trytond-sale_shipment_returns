@@ -51,7 +51,7 @@ class CreateSaleReturn(Wizard):
 
             # add shipment_party when delivery address party
             # is not the same as the customer
-            delivery_address = shipment_out_return.delivery_address
+            delivery_address = shipment_out_return.contact_address
             if delivery_address.party and (delivery_address.party != party):
                 sale.shipment_party = delivery_address.party
             sale.shipment_address = delivery_address
