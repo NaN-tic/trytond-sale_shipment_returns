@@ -7,8 +7,6 @@ from trytond.transaction import Transaction
 from trytond.i18n import gettext
 from trytond.exceptions import UserError
 
-__all__ = ['CreateSaleReturn']
-
 
 class CreateSaleReturn(Wizard):
     'Create Sale from Customer Return Shipment'
@@ -64,7 +62,10 @@ class CreateSaleReturn(Wizard):
                     if hasattr(m, 'origin') and isinstance(m.origin, SaleLine)}
                 for move in shipment_out_return.incoming_moves:
                     if move.product in outgoing_move_products:
-                        values = {'quantity': -move.quantity}
+                        values = {
+                            'sale': None,
+                            'quantity': -move.quantity,
+                            }
                         if hasattr(SaleLine, 'kit_parent_line'):
                             values['kit_parent_line'] = None
                         with Transaction().set_context(check_kit_parent_line=False):
