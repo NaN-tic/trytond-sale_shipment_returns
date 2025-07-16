@@ -2,24 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:stock.sale.return.create:"
-msgid "Shipment Out Return \"%s\""
-msgstr "Albararán de devolución \"%s\""
-
-msgctxt "error:stock.sale.return.create:"
-msgid "Shipment Out Return \"%s\" origin does not come from a Shipment Out"
-msgstr ""
-"El origen del albarán de devolución \"%s\" no proviene de un albarán de "
-"cliente."
-
-msgctxt "error:stock.sale.return.create:"
-msgid "The return shipment with code \"%s\" is not yet sent."
-msgstr "El albarán de devolución con código \"%s\" no se ha enviado todavía."
-
-msgctxt "error:stock.sale.return.create:"
-msgid "You can not create return sale"
-msgstr "No puede crear una venta a partir de una devolución"
-
 msgctxt "model:ir.action,name:create_sale_return"
 msgid "Create Return Sale"
 msgstr "Crear venta de devolución"
