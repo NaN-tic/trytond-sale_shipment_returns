@@ -5,3 +5,23 @@ msgstr "Content-Type: text/plain; charset=utf-8\n"
 msgctxt "model:ir.action,name:create_sale_return"
 msgid "Create Return Sale"
 msgstr "Crear venta de devolución"
+
+msgctxt "model:ir.message,text:msg_shipment_description"
+msgid "Shipment Out Return \"%(shipment)s\""
+msgstr "Envío de devolución \"%(shipment)s\""
+
+msgctxt "model:ir.message,text:msg_shipment_done_msg"
+msgid "The return shipment with code \"%(shipment)s\" is not yet sent."
+msgstr ""
+"El envío de devolución con el código \"%(shipment)s\" aún no se ha enviado."
+
+msgctxt "model:ir.message,text:msg_shipment_done_title"
+msgid "You can not create return sale from \"%(shipment)s\""
+msgstr "No se puede crear una venta de devolución desde \"%(shipment)s\""
+
+msgctxt "model:ir.message,text:msg_shipment_out_origin"
+msgid ""
+"Shipment Out Return \"%(shipment)s\" origin does not come from a Shipment "
+"Out"
+msgstr ""
+"El origen de la devolución de envío \"%(shipment)s\" no proviene de un envío."
